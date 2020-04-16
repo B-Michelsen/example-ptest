@@ -7,3 +7,6 @@ include(GNUInstallDirs)
 
 set_target_properties(main PROPERTIES OUTPUT_NAME "my-application")
 install(TARGETS main RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR})
+
+add_custom_target(component-test
+	COMMAND ${CMAKE_SOURCE_DIR}/tools/run-component-test.sh)
