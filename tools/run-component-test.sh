@@ -1,9 +1,6 @@
 #!/bin/bash
-BRANCH_NAME="$(git rev-parse --abbrev-ref HEAD)"
-SRCREV="$(git ls-remote origin | head -1 | cut -f 1)"
 COMPONENT_NAME=$1
 TARGET="root@192.168.7.2"
-LAYER_NAME="meta-poc"
 IMAGE="core-image-full-cmdline"
 YOCTO_PATH="/home/bjarne/repos/yocto"
 PROJECT_PATH="/home/bjarne/repos/example-ptest"
@@ -22,7 +19,7 @@ setup() {
 		# take a look at testimage.bbclass
 		#runqemu ${IMAGE} qemuparams='--nographic' &
 	fi
-	echo "Updating recipe to build from local branch ${BRANCH_NAME}"
+	echo "Updating recipe to build from repository ${PROJECT_PATH}"
 	# TODO: what if the sources are already in workspace?
 	# 1. call devtool reset --remove-work
 	# 2. don't force anything, just fail with message.
@@ -47,14 +44,6 @@ run_test() {
 	ssh ${TARGET} ptest-runner ${COMPONENT_NAME}
 }
 
-update_recipe() {
-	devtool reset ${COMPONENT_NAME} --remove-work
-	devtool upgrade ${COMPONENT_NAME} --srcrev ${SRCREV} master
-	devtool finish ${COMPONENT_NAME} ${LAYER_NAME} --remove-work
-}
-
 setup
 build
 run_test
-# Update recipe could be optional. Not necessary for testing.
-#update_recipe
