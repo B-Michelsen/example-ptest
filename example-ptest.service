@@ -1,0 +1,10 @@
+[Unit]
+Description=My example service
+After=basic.target
+
+[Service]
+Type=simple
+ExecStart=/usr/bin/my-application
+
+[Install]
+WantedBy=multi-user.target
